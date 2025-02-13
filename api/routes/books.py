@@ -3,6 +3,8 @@ from typing import OrderedDict
 from fastapi import APIRouter, status
 from fastapi.responses import JSONResponse
 
+from fastapi import APIRouter, HTTPException, status
+
 from api.db.schemas import Book, Genre, InMemoryDB
 
 router = APIRouter()
