@@ -41,7 +41,7 @@ jobs:
       run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
     - name: Build Docker Image
-      run: docker build -t godwithus/book-api .
+      run: docker build -t Opeyemi-Esan HngStageTwoProject.
 
     - name: Push Docker Image to DockerHub
-      run: docker push godwithus/book-api:latest
+      run: docker push Opeyemi-Esan/HngStageTwoProject:latest
