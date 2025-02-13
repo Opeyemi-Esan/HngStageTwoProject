@@ -12,10 +12,10 @@ jobs:
 
     steps:
     - name: Pull Docker Image
-      run: sudo docker pull godwithus/book-api:latest
+      run: sudo docker pull Opeyemi-Esan/HngStageTwoProject:latest
 
     - name: Stop Existing Container
       run: sudo docker rm -f fastapi-container || true  # Remove the existing container
 
     - name: Run Docker Container
-      run: sudo docker run -d -p 8000:8000 --name fastapi-container godwithus/book-api:latest
+      run: sudo docker run -d -p 8000:8000 --name fastapi-container Opeyemi-Esan/HngStageTwoProject-api:latest
