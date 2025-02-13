@@ -1,26 +1,47 @@
-name: CI Pipeline  
+name: CI Pipeline
 
-on:  
-  pull_request:  
-    branches:  
-      - main  
+# Trigger the workflow on pull requests and pushes to the main branch
+on:
+  pull_request:
+    branches: [ "main" ]
+  push:
+    branches: [ "main" ]
 
-jobs:  
-  test:  
-    runs-on: ubuntu-latest  
-    steps:  
-      - name: Checkout code  
-        uses: actions/checkout@v2  
+jobs:
+  test:
+    runs-on: ubuntu-latest
 
-      - name: Set up Python  
-        uses: actions/setup-python@v2  
-        with:  
-          python-version: '3.8'  # Replace with your Python version  
+    steps:
+    - uses: actions/checkout@v3
 
-      - name: Install dependencies  
-        run: |  
-          python -m pip install --upgrade pip  
-          pip install -r requirements.txt  
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.x'
 
-      - name: Run tests  
-        run: pytest
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Run Tests
+      run: pytest
+
+  build:
+    needs: test # Only run if the 'test' job succeeds
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Login to DockerHub
+      env:
+        DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
+        DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+      run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+
+    - name: Build Docker Image
+      run: docker build -t godwithus/book-api .
+
+    - name: Push Docker Image to DockerHub
+      run: docker push godwithus/book-api:latest

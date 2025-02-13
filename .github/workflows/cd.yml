@@ -1,22 +1,21 @@
-name: CD Pipeline  
+name: CD Pipeline
 
-on:  
-  push:  
-    branches:  
-      - main  
+on:
+  workflow_run:
+    workflows: ["CI Pipeline"]
+    types:
+      - completed
 
-jobs:  
-  deploy:  
-    runs-on: ubuntu-latest  
-    steps:  
-      - name: Checkout code  
-        uses: actions/checkout@v2  
+jobs:
+  deploy:
+    runs-on: self-hosted
 
-      - name: Set up SSH  
-        uses: webfactory/ssh-agent@v0.5.3  
-        with:  
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}  
+    steps:
+    - name: Pull Docker Image
+      run: sudo docker pull godwithus/book-api:latest
 
-      - name: Deploy to AWS  
-        run: |  
-          ssh -o StrictHostKeyChecking=no ec2-user@YOUR_AWS_INSTANCE "cd /path/to/your/app && git pull && source venv/bin/activate && uvicorn main:app --host 0.0.0.0 --port 8000 &"
+    - name: Stop Existing Container
+      run: sudo docker rm -f fastapi-container || true  # Remove the existing container
+
+    - name: Run Docker Container
+      run: sudo docker run -d -p 8000:8000 --name fastapi-container godwithus/book-api:latest
