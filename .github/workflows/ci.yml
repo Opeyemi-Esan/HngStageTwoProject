@@ -42,7 +42,7 @@ jobs:
       run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
     - name: Build Docker Image
-      run: docker build -t Opeyemi-Esan HngStageTwoProject.
+      run: docker build -t hngstagetwoproject.
 
     - name: Push Docker Image to DockerHub
-      run: docker push Opeyemi-Esan/HngStageTwoProject:latest
+      run: docker push enop7156/hngstagetwoproject:latest
