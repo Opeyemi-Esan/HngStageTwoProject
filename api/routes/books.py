@@ -6,6 +6,7 @@ from fastapi.responses import JSONResponse
 from api.db.schemas import Book, Genre, InMemoryDB
 
 
+
 router = APIRouter()
 
 db = InMemoryDB()
